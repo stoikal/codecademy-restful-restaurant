@@ -72,18 +72,50 @@ router.get("/:id", (req, res) => {
 /**
  * Feature 8: Adding to your list of starred restaurants.
  */
+router.post("/", (req, res) => {
+  const starredRestaurant = {
+    id: uuidv4(),
+    restaurantId: req.body.restaurantId,
+    comment: req.body.comment,
+  };
 
+  STARRED_RESTAURANTS.push(starredRestaurant);
+
+  res.status(201).json(starredRestaurant);
+});
 
 
 /**
  * Feature 9: Deleting from your list of starred restaurants.
  */
+router.delete("/id", (req, res) => {
+  const { id } = req.params;
+
+  const index = STARRED_RESTAURANTS.findIndex((starredRestaurant) => starredRestaurant.id === id);
+  if (index > -1) {
+    STARRED_RESTAURANTS.splice(index, 1);
+    return res.status(204).send();
+  }
+
+  res.status(404).send();
+})
 
 
 /**
  * Feature 10: Updating your comment of a starred restaurant.
  */
+router.delete("/id", (req, res) => {
+  const { id } = req.params;
 
+  const index = STARRED_RESTAURANTS.findIndex((starredRestaurant) => starredRestaurant.id === id);
+  if (index > -1) {
+    const starredRestaurant = { ...req.body, id };
+    STARRED_RESTAURANTS.splice(index, 1, starredRestaurant);
+    return res.status(204).send(starredRestaurant);
+  }
+
+  res.status(404).send();
+})
 
 
 module.exports = router;
